@@ -139,7 +139,7 @@ bool Asic::sendHashFrequency(float target_freq) {
     }
 
     if (!found) {
-        ESP_LOGE(TAG, "Didn't find PLL settings for target frequency %.2f", target_freq);
+        ESP_LOGE(TAG, "Didn't find PLL settings for target frequency %.2f ❌", target_freq);
         return false;
     }
 
@@ -151,14 +151,15 @@ bool Asic::sendHashFrequency(float target_freq) {
     send(CMD_WRITE_ALL, freqbuf, sizeof(freqbuf), ASIC_SERIALTX_DEBUG);
     //ESP_LOG_BUFFER_HEX(TAG, freqbuf, sizeof(freqbuf));
 
-    ESP_LOGI(TAG, "Setting Frequency to %.2fMHz (%.2f)", target_freq, best_newf);
+    ESP_LOGI(TAG, "Setting Frequency to %.2fMHz (%.2f) 🥳", target_freq, best_newf);
     m_current_frequency = target_freq;
     return true;
 }
 
 // Function to perform frequency transition up or down
 bool Asic::doFrequencyTransition(float target_frequency) {
-    float step = 6.25;
+    // float step = 6.25;  // default
+    float step = 12.5;  // Celshade/MrV ULTIMATE POWER 🔥
     float current = m_current_frequency;
     float target = target_frequency;
 
@@ -176,7 +177,7 @@ bool Asic::doFrequencyTransition(float target_frequency) {
         }
         current = next_dividable;
         if (!sendHashFrequency(current)) {
-            printf("ERROR: Failed to set frequency to %.2f MHz\n", current);
+            printf("ERROR: Failed to set frequency to %.2f MHz 😭\n", current);
             return false;
         }
         vTaskDelay(100 / portTICK_PERIOD_MS);
@@ -187,7 +188,7 @@ bool Asic::doFrequencyTransition(float target_frequency) {
         float next_step = fmin(fabs(direction), fabs(target - current));
         current += direction > 0 ? next_step : -next_step;
         if (!sendHashFrequency(current)) {
-            printf("ERROR: Failed to set frequency to %.2f MHz\n", current);
+            printf("ERROR: Failed to set frequency to %.2f MHz 😭\n", current);
             return false;
         }
         vTaskDelay(100 / portTICK_PERIOD_MS);
@@ -195,7 +196,7 @@ bool Asic::doFrequencyTransition(float target_frequency) {
 
     // Set the exact target frequency to finalize
     if (!sendHashFrequency(target)) {
-        printf("ERROR: Failed to set frequency to %.2f MHz\n", target);
+        printf("ERROR: Failed to set frequency to %.2f MHz 😭\n", target);
         return false;
     }
     return true;
