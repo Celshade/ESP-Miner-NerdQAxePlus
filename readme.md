@@ -109,6 +109,7 @@ The default `builder` user has `uid:gid = 1000:1000` (like the main user on *bun
 ./docker/idf-shell.sh
 
 # set target and build the binaries
+export BOARD="NERDQAXEPLUS2"
 idf.py set-target esp32s3
 idf.py build
 
