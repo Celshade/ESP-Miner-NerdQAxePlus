@@ -10,7 +10,7 @@ NerdQaxePlus2::NerdQaxePlus2() : NerdQaxePlus() {
     m_asicCount = 4;
     m_numPhases = 3;
     m_imax = m_numPhases * 30;
-    m_ifault = (float) (m_imax + 15;
+    m_ifault = (float) (m_imax + 10);
 
     m_asicJobIntervalMs = 500;
     m_defaultAsicFrequency = m_asicFrequency = 600;
