@@ -12,6 +12,7 @@ This is a forked version from the NerdAxe miner that was modified for using on t
 Credits to the devs:
 - BitAxe devs on OSMU: @skot/ESP-Miner, @ben and @jhonny
 - NerdAxe dev @BitMaker
+- This unlocked version of the firmware (for QAxe++ in particular) @Celshade
 
 
 ## How to flash/update firmware
@@ -91,6 +92,7 @@ The current repository will be mounted to `/home/builder/project`.
 The default `builder` user has `uid:gid = 1000:1000` (like the main user on *buntu/Mint)
 
 #### 3. Compiling & Flashing using the shell
+_Jump to section 3.3 for building QAxe++ binaries_
 
 #### 3.1. Just flashing with dockered `bitaxetool` with factory binary
 
@@ -109,7 +111,6 @@ The default `builder` user has `uid:gid = 1000:1000` (like the main user on *bun
 ./docker/idf-shell.sh
 
 # set target and build the binaries
-export BOARD="NERDQAXEPLUS2"
 idf.py set-target esp32s3
 idf.py build
 
@@ -127,6 +128,9 @@ bitaxetool --config config.cvs --firmware esp-miner-factory-nerdqaxe+.bin  -p /d
 # start idf-shell
 ./docker/idf-shell.sh
 
+# Required for QAxe++ builds
+export BOARD="NERDQAXEPLUS2"
+
 # set target and build the binaries
 idf.py set-target esp32s3
 
@@ -135,6 +139,11 @@ idf.py menuconfig
 
 # build the binaries
 idf.py build
+
+# ### FINAL STEP FOR QAXE++ BUILDS ### #
+exit  # exit the idf-shell
+mv ./build/esp-miner.bin ./esp-miner-NerdQAxe++.bin  # Formats and moves executable to current dir
+# =================================== #
 
 # creat config.bin nvm partition from config.cvs
 nvs_partition_gen.py generate config.cvs config.bin 12288
